@@ -1,0 +1,12 @@
+---
+# Robotiq 2F-85 gripper controller (spawned by sim.launch.py in the /robot namespace).
+# One command interface: the left knuckle joint; all other finger joints mimic it.
+# Command: std_msgs/Float64MultiArray on /robot/gripper_controller/commands
+#   0.0 = fully open, ~0.79 = fully closed
+/**:
+  gripper_controller:
+    ros__parameters:
+      type: position_controllers/JointGroupPositionController
+      joints:
+        - robot_gripper_robotiq_85_left_knuckle_joint
+      interface_name: position

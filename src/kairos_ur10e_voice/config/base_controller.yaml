@@ -1,0 +1,39 @@
+---
+# Open-source mecanum base controller (replaces Robotnik's RBKairosController, which crashes Gazebo here).
+# Reference: geometry_msgs/TwistStamped on /robot/mecanum_drive_controller/reference
+/**:
+  mecanum_drive_controller:
+    ros__parameters:
+      type: mecanum_drive_controller/MecanumDriveController
+      # Jazzy parameter names (several spellings listed; unknown ones are ignored)
+      front_left_wheel_command_joint_name: robot_front_left_wheel_joint
+      front_right_wheel_command_joint_name: robot_front_right_wheel_joint
+      rear_left_wheel_command_joint_name: robot_back_left_wheel_joint
+      rear_right_wheel_command_joint_name: robot_back_right_wheel_joint
+      front_left_wheel_state_joint_name: robot_front_left_wheel_joint
+      front_right_wheel_state_joint_name: robot_front_right_wheel_joint
+      rear_left_wheel_state_joint_name: robot_back_left_wheel_joint
+      rear_right_wheel_state_joint_name: robot_back_right_wheel_joint
+      command_joint_names:
+        - robot_front_left_wheel_joint
+        - robot_front_right_wheel_joint
+        - robot_back_left_wheel_joint
+        - robot_back_right_wheel_joint
+      state_joint_names:
+        - robot_front_left_wheel_joint
+        - robot_front_right_wheel_joint
+        - robot_back_left_wheel_joint
+        - robot_back_right_wheel_joint
+      kinematics:
+        base_frame_offset: {x: 0.0, y: 0.0, theta: 0.0}
+        wheels_radius: 0.11
+        sum_of_robot_center_projection_on_X_Y_axis: 0.464   # (track 0.47 + wheel_base 0.458) / 2
+      wheel_separation_x: 0.458
+      wheel_separation_y: 0.47
+      wheel_radius: 0.11
+      base_frame_id: robot_base_footprint
+      odom_frame_id: robot_odom
+      enable_odom_tf: false
+      position_feedback: false
+      reference_timeout: 0.5
+      use_stamped_vel: true

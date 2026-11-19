@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!--
+  Real Robotnik RB-Kairos+ with UR10e (Robotnik's own description) plus a Robotiq 2F-85 gripper.
+
+  - Everything about the Kairos+ base, the UR10e mount, sensors and the base/arm ros2_control
+    comes from robotnik_description: robots/rbkairos/rbkairos_plus.urdf.xacro
+  - The gripper comes from ros2_robotiq_gripper (package robotiq_description) and is mounted on
+    the UR10e tool flange through the official UR -> Robotiq adapter.
+
+  Gripper joint that is commanded:  <prefix>gripper_robotiq_85_left_knuckle_joint
+  (the other finger joints mimic it).
+
+  If xacro complains that the tool link does not exist, find the real name with
+    xacro <this file> gazebo_ignition:=true prefix:=robot_ | grep -o 'link name="[^"]*tool0"'
+  and pass it without the prefix, e.g.  tool_link:=arm_tool0
+-->
+<robot name="rbkairos_plus" xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <!-- Robotnik Kairos+ with UR10e (declares args: namespace, prefix, gazebo_ignition, ur_type) -->
+  <xacro:include
+    filename="$(find robotnik_description)/robots/rbkairos/rbkairos_plus.urdf.xacro" />
+
+  <!-- Robotiq 2F-85 -->
+  <xacro:include
+    filename="$(find robotiq_description)/urdf/robotiq_2f_85_macro.urdf.xacro" />
+  <xacro:include
+    filename="$(find robotiq_description)/urdf/ur_to_robotiq_adapter.urdf.xacro" />
+
+  <xacro:arg name="tool_link" default="arm_tool0" />
+
+  <!-- Adapter plate on the UR10e flange -->
+  <xacro:ur_to_robotiq
+    prefix="$(arg prefix)gripper_"
+    parent="$(arg prefix)$(arg tool_link)"
+    child="$(arg prefix)gripper_mount_link" />
+
+  <!-- Gripper, simulated with gz_ros2_control (mimic joints handled by the plugin) -->
+  <xacro:robotiq_gripper
+    name="RobotiqGripper"
+    prefix="$(arg prefix)gripper_"
+    parent="$(arg prefix)gripper_mount_link"
+    sim_gazebo="true"
+    include_ros2_control="true"
+    use_fake_hardware="false">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:robotiq_gripper>
+
+</robot>
